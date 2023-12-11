@@ -1,0 +1,32 @@
+- name: Install zsh
+  apt: name=zsh
+  tags:
+    - zsh
+- name: Change shell
+  shell: chsh -s `which zsh`
+  tags:
+    - zsh
+- name: Install zsh-autosuggestions
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+    dest: ~/.zsh/plugins/zsh-autosuggestions
+  tags:
+    - zsh
+- name: Install zsh-syntax-highlighting
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+    dest: ~/.zsh/plugins/zsh-syntax-highlighting
+  tags:
+    - zsh
+- name: Install zsh-z
+  ansible.builtin.git:
+    repo: 'https://github.com/agkozak/zsh-z'
+    dest: ~/.zsh/plugins/zsh-z
+  tags:
+    - zsh
+- name: Install powerlevel10k theme
+  ansible.builtin.git:
+    repo: 'https://github.com/romkatv/powerlevel10k.git'
+    dest: ~/.zsh/plugins/powerlevel10k
+  tags:
+    - zsh
