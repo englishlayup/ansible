@@ -1,0 +1,17 @@
+- name: Install System Packages (build-essential, pkg-config)
+  become: true
+  apt:
+    name: ["build-essential", "pkg-config"]
+  tags:
+    - install
+    - neovim
+    - core
+
+- name: Install Neovim Build Dependencies
+  become: true
+  apt:
+    name: ["ninja-build", "gettext", "cmake", "unzip", "curl"]
+  tags:
+    - install
+    - neovim
+    - core

@@ -1,15 +1,14 @@
+- name: Install nvm
+  shell: >
+    PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  tags:
+    - install
+    - node
+
 - name: Install node
-  apt:
-    name: ['nodejs', 'npm']
+  shell: \. $HOME/.nvm/nvm.sh && nvm install 20.10.0 && nvm use 20.10.0
   tags:
-    - node
-- name: Install n
-  npm:
-    name: n
-    global: true
-  tags:
-    - node
-- name: n 20.10.0
-  shell: n 20.10.0 
-  tags:
+    - install
     - node

@@ -1,13 +1,22 @@
 - hosts: localhost
-  become: true
+  vars:
+    source_key: "./.ssh/id_ed25519"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   pre_tasks:
-    - name: Update cache
-      apt:
-        update_cache: true
-      tags:
-        - node
-        - zsh
+  - name: Update Apt
+    become: true
+    apt:
+      force_apt_get: true
+      update_cache: true
+      state: present
+    tags:
+      - install
+      - core
   tasks:
-    - include_tasks: tasks/zsh.yml
-    - include_tasks: tasks/node.yml
-    - include_tasks: tasks/productivity-tools.yml
+    - import_tasks: tasks/ssh.yml
+    - import_tasks: tasks/dotfiles.yml
+    - import_tasks: tasks/zsh.yml
+    - import_tasks: tasks/node.yml
+    - import_tasks: tasks/core.yml
+    - import_tasks: tasks/nvim.yml
+    - import_tasks: tasks/productivity-tools.yml
