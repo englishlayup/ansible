@@ -5,7 +5,7 @@
 
 - name: Change shell
   become: true
-  shell: chsh -s `which zsh`
+  shell: chsh -s `which zsh` {{ ansible_user_id }}
   tags: *tags_for_zsh_tasks
 
 - name: Install zsh-autosuggestions
