@@ -12,3 +12,17 @@
     value: "Duc Tran"
   tags:
   - git-personal
+- name: Git MCHP setup email
+  git_config:
+    name: user.email
+    scope: global
+    value: "ducngoc.tran@microchip.com"
+  tags:
+  - git-mchp
+- name: Git MCHP setup name
+  git_config:
+    name: user.name
+    scope: global
+    value: "Duc Tran"
+  tags:
+  - git-mchp
