@@ -1,14 +1,28 @@
-- name: Install nvm
-  shell: >
-    PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'
-  args:
-    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
-  tags:
-    - install
-    - node
+- name: Install required packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - curl
+      - build-essential
+    state: present
+    update_cache: yes
 
-- name: Install node
-  shell: bash -c "\. $HOME/.nvm/nvm.sh && nvm install 20.10.0 && nvm use 20.10.0"
-  tags:
-    - install
-    - node
+- name: Download nvm installation script
+  ansible.builtin.shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.nvm/nvm.sh"
+
+- name: Load nvm and install Node.js (LTS version)
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install --lts
+  environment:
+    NVM_DIR: "{{ lookup('env', 'HOME') }}/.nvm"
+
+
+- name: Add nvm to bash profile
+  ansible.builtin.shell: |
+    echo 'export NVM_DIR="$HOME/.nvm"' >> "{{ lookup('env', 'HOME') }}/.bashrc"
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "{{ lookup('env', 'HOME') }}/.bashrc"
