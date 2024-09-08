@@ -1,4 +1,64 @@
 - name: Install packages
   become: true
   apt:
-    name: [ "tmux", "fzf", "xclip", "tldr", "ripgrep" ]
+    name: [ "fish", "tmux", "fzf", "xsel", "tldr", "ripgrep", "bat" ]
+
+- name: Ensure ~/.local/bin directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+
+- name: Create symbolic link for batcat as bat in ~/.local/bin
+  ansible.builtin.file:
+    src: /usr/bin/batcat
+    dest: "{{ ansible_env.HOME }}/.local/bin/bat"
+    state: link
+
+- name: Install dependencies for Alacritty
+  become: true
+  ansible.builtin.apt:
+    name:
+      - cmake
+      - pkg-config
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libxcb-xfixes0-dev
+      - libxkbcommon-dev
+      - python3
+      - cargo
+
+- name: Clone the Alacritty repository
+  ansible.builtin.git:
+    repo: https://github.com/alacritty/alacritty.git
+    dest: "/tmp/alacritty"
+    version: master
+
+- name: Build Alacritty using cargo
+  ansible.builtin.shell: |
+    cd /tmp/alacritty
+    cargo build --release
+
+- name: Install Alacritty
+  become: true
+  ansible.builtin.copy:
+    src: "/tmp/alacritty/target/release/alacritty"
+    dest: "/usr/local/bin/alacritty"
+    mode: "755"
+
+- name: Set up Alacritty terminfo
+  become: true
+  ansible.builtin.shell: |
+    tic -xe alacritty,alacritty-direct {{ ansible_env.HOME }}/alacritty/extra/alacritty.info
+
+- name: Create directory for Fish completions
+  ansible.builtin.shell:
+    cmd: |
+      mkdir -p $fish_complete_path[1]
+    executable: /usr/bin/fish
+
+- name: Copy Alacritty Fish completion file
+  ansible.builtin.shell:
+    cmd: |
+      cp /tmp/alacritty/extra/completions/alacritty.fish $fish_complete_path[1]/alacritty.fish
+    executable: /usr/bin/fish
