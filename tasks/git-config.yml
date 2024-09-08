@@ -1,28 +1,14 @@
-- name: Git personal setup email
+- name: Git setup email
   git_config:
     name: user.email
     scope: global
     value: "37317525+englishlayup@users.noreply.github.com"
   tags:
   - git-personal
-- name: Git personal setup name
+- name: Git setup name
   git_config:
     name: user.name
     scope: global
     value: "Duc Tran"
   tags:
   - git-personal
-- name: Git MCHP setup email
-  git_config:
-    name: user.email
-    scope: global
-    value: "ducngoc.tran@microchip.com"
-  tags:
-  - git-mchp
-- name: Git MCHP setup name
-  git_config:
-    name: user.name
-    scope: global
-    value: "Duc Tran"
-  tags:
-  - git-mchp
