@@ -1,3 +1,12 @@
+- name: Install Neovim Build Dependencies
+  become: true
+  apt:
+    name: ["ninja-build", "gettext", "cmake", "unzip", "curl"]
+  tags:
+    - install
+    - neovim
+    - core
+
 - name: Remove neovim
   shell: rm -rf ~/neovim
   tags:
@@ -6,19 +15,19 @@
 - name: Clone Neovim
   ansible.builtin.git:
     repo: 'https://github.com/neovim/neovim.git'
-    dest: "{{ lookup('env', 'HOME') }}/neovim"
-    version: v0.9.4
+    dest: "/tmp/neovim"
+    version: v0.10.0
   tags:
     - install
     - neovim
 - name: Build neovim
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make -j 20 CMAKE_BUILD_TYPE=Release"
+  shell: "cd /tmp/neovim && make -j 20 CMAKE_BUILD_TYPE=Release"
   tags:
     - install
     - neovim
 - name: Install neovim
   become: true
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
+  shell: "cd /tmp/neovim && make install"
   tags:
     - install
     - neovim
