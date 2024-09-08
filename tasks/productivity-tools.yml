@@ -49,7 +49,7 @@
 - name: Set up Alacritty terminfo
   become: true
   ansible.builtin.shell: |
-    tic -xe alacritty,alacritty-direct {{ ansible_env.HOME }}/alacritty/extra/alacritty.info
+    tic -xe alacritty,alacritty-direct /tmp/alacritty/extra/alacritty.info
 
 - name: Create directory for Fish completions
   ansible.builtin.shell:
