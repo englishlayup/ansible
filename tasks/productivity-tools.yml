@@ -3,6 +3,10 @@
   apt:
     name: [ "fish", "tmux", "fzf", "xsel", "tldr", "ripgrep", "bat" ]
 
+- name: Change shell to fish
+  become: true
+  shell: chsh -s `which fish` {{ ansible_user_id }}
+
 - name: Ensure ~/.local/bin directory exists
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.local/bin"
