@@ -1,28 +1,14 @@
-- name: Install required packages
+- name: Install required packages for fnm
   become: true
   ansible.builtin.apt:
     name:
       - curl
-      - build-essential
-    state: present
-    update_cache: yes
+      - unzip
 
-- name: Download nvm installation script
-  ansible.builtin.shell: |
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
-  args:
-    creates: "{{ lookup('env', 'HOME') }}/.nvm/nvm.sh"
-
-- name: Load nvm and install Node.js (LTS version)
-  ansible.builtin.shell: |
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install --lts
-  environment:
-    NVM_DIR: "{{ lookup('env', 'HOME') }}/.nvm"
-
-
-- name: Add nvm to bash profile
-  ansible.builtin.shell: |
-    echo 'export NVM_DIR="$HOME/.nvm"' >> "{{ lookup('env', 'HOME') }}/.bashrc"
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "{{ lookup('env', 'HOME') }}/.bashrc"
+- name: Download fnm installation script
+  ansible.builtin.shell:
+    cmd: |
+      curl -fsSL https://fnm.vercel.app/install | bash
+      source {{ lookup('env', 'HOME') }}/.config/fish/conf.d/fnm.fish
+      fnm install --lts
+    executable: /usr/bin/fish
