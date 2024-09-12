@@ -6,9 +6,7 @@
       - unzip
 
 - name: Download fnm installation script
-  ansible.builtin.shell:
-    cmd: |
-      curl -fsSL https://fnm.vercel.app/install | bash
-      source {{ lookup('env', 'HOME') }}/.config/fish/conf.d/fnm.fish
-      fnm install --lts
-    executable: /usr/bin/fish
+  ansible.builtin.shell: |
+      export SHELL=`which fish`
+      fish -c 'curl -fsSL https://fnm.vercel.app/install | bash'
+      fish -c 'fnm install --lts'
