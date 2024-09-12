@@ -1,7 +1,8 @@
 - hosts: localhost
   vars:
-    source_key: "./.ssh/id_ed25519"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+    ssh_keys:
+      - { private_key: "id_ed25519", public_key: "id_ed25519.pub" }
+      - { private_key: "mchp-key", public_key: "mchp-key.pub" }
   pre_tasks:
   - name: Update Apt
     become: true
